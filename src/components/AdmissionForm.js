@@ -1,4 +1,7 @@
 // src/components/AdmissionForm.js
+
+import { API_BASE_URL } from '../config';
+
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
