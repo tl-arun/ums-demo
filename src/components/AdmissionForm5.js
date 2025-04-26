@@ -47,7 +47,7 @@ const StudentDetailsForm5 = () => {
     };
   };
 
-  const handleSubmit = (e) => {
+  /* const handleSubmit = (e) => {
     e.preventDefault();
     setSubmittedData([...submittedData, formData]);
     setFormData({
@@ -64,6 +64,63 @@ const StudentDetailsForm5 = () => {
       driving_file: null,
       marksheet_file: null
     });
+  }; */
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      // Create FormData object to handle file uploads
+      const formDataToSend = new FormData();
+      
+      // Append all form fields
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value instanceof File) {
+          formDataToSend.append(key, value);
+        } else if (value !== null && value !== undefined) {
+          formDataToSend.append(key, value);
+        }
+      });
+  
+      // Submit to server endpoint
+      const response = await fetch('http://your-server-endpoint.com/api/student', {
+        method: 'POST',
+        body: formDataToSend,
+        // Don't set Content-Type header - let the browser set it with boundary
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const result = await response.json();
+      console.log('Success:', result);
+      
+      // Update local state with submitted data
+      setSubmittedData([...submittedData, formData]);
+      
+      // Reset form
+      setFormData({
+        fullName: "",
+        dob: "",
+        aadhar: "",
+        pan: "",
+        license: "",
+        email: "",
+        contactNumber: "",
+        photo: null,
+        aadhar_file: null,
+        pan_file: null,
+        driving_file: null,
+        marksheet_file: null
+      });
+  
+      alert('Form submitted successfully!');
+      
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error submitting form');
+    }
   };
 
   return (
