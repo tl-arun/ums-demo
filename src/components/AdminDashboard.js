@@ -1,14 +1,32 @@
 // src/components/AdminDashboard.js
-import { API_BASE_URL } from '../config';
+//import { API_BASE_URL } from '../config';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button, Container, Typography, Box } from '@mui/material';
+//import { Button, Container, Typography, Box } from '@mui/material';
+//import React, { useState, useEffect } from 'react';
+import { 
+  Button,
+  Container,
+  Box, 
+  Typography, 
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Chip,
+  Grid,
+  Card,
+  CardContent
+} from '@mui/material';
 
 const AdminDashboard = () => {
   const [students, setStudents] = useState([]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     const fetchStudents = async () => {
       try {
         const response = await axios.get('http://localhost:8000/api/students');
@@ -18,7 +36,30 @@ const AdminDashboard = () => {
       }
     };
     fetchStudents();
+  }, []); */
+  const [data, setData] = useState({ students: [], stats: {} });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate API call
+    const fetchData = async () => {
+      try {
+        // In a real app, you would use fetch('/api/students')
+        const response = await import('../mockData.json');
+        setData(response.default);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
 
   const handleVerify = async (id) => {
     try {

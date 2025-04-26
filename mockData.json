@@ -1,0 +1,46 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "fullName": "Rahul Sharma",
+      "dob": "2000-05-15",
+      "aadharNumber": "123456789012",
+      "panNumber": "ABCDE1234F",
+      "drivingLicense": "DL123456789",
+      "email": "rahul.sharma@example.com",
+      "contactNumber": "9876543210",
+      "admissionDate": "2023-01-10",
+      "status": "Active"
+    },
+    {
+      "id": 2,
+      "fullName": "Priya Patel",
+      "dob": "2001-08-22",
+      "aadharNumber": "234567890123",
+      "panNumber": "BCDEF2345G",
+      "drivingLicense": "DL234567890",
+      "email": "priya.patel@example.com",
+      "contactNumber": "8765432109",
+      "admissionDate": "2023-02-15",
+      "status": "Active"
+    },
+    {
+      "id": 3,
+      "fullName": "Amit Singh",
+      "dob": "1999-11-30",
+      "aadharNumber": "345678901234",
+      "panNumber": "CDEFG3456H",
+      "drivingLicense": "DL345678901",
+      "email": "amit.singh@example.com",
+      "contactNumber": "7654321098",
+      "admissionDate": "2023-03-20",
+      "status": "Inactive"
+    }
+  ],
+  "stats": {
+    "totalStudents": 3,
+    "activeStudents": 2,
+    "inactiveStudents": 1,
+    "lastUpdated": "2023-06-01T10:30:00Z"
+  }
+}
