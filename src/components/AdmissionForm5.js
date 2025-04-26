@@ -6,18 +6,18 @@ import Label from './ui/Label';
 
 const StudentDetailsForm5 = () => {
   const [formData, setFormData] = useState({
-    fullName: "",
-    dob: "",
-    aadhar: "",
-    pan: "",
-    license: "",
+    Name: "",
+    Dob: "",
+    //aadhar: "",
+    //pan: "",
+    DrivingLicenseNo: "",
     email: "",
     contactNumber: "",
     photo: null,
-    aadhar_file: null,
-    pan_file: null,
-    driving_file: null,
-    marksheet_file: null
+    Aadhar: null,
+    Pan: null,
+    DrivingLicence: null,
+    Marksheet: null
   });
 
   const [submittedData, setSubmittedData] = useState([]);
@@ -32,7 +32,7 @@ const StudentDetailsForm5 = () => {
   };
 
   const handleDateChange = (e) => {
-    setFormData({ ...formData, dob: e.target.value });
+    setFormData({ ...formData, Dob: e.target.value });
   };
 
   const getFileValidation = (file) => {
@@ -47,26 +47,7 @@ const StudentDetailsForm5 = () => {
     };
   };
 
-  /* const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmittedData([...submittedData, formData]);
-    setFormData({
-      fullName: "",
-      dob: "",
-      aadhar: "",
-      pan: "",
-      license: "",
-      email: "",
-      contactNumber: "",
-      photo: null,
-      aadhar_file: null,
-      pan_file: null,
-      driving_file: null,
-      marksheet_file: null
-    });
-  }; */
-
-  const handleSubmit = async (e) => {
+  /* const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
@@ -83,7 +64,7 @@ const StudentDetailsForm5 = () => {
       });
   
       // Submit to server endpoint
-      const response = await fetch('http://your-server-endpoint.com/api/student', {
+      const response = await fetch('https://stagingapi.teamleaseedtech.com/api/enquiry/saveForm', {
         method: 'POST',
         body: formDataToSend,
         // Don't set Content-Type header - let the browser set it with boundary
@@ -102,16 +83,16 @@ const StudentDetailsForm5 = () => {
       // Reset form
       setFormData({
         fullName: "",
-        dob: "",
-        aadhar: "",
+        Dob: "",
+        AadharNo: "",
         pan: "",
-        license: "",
+        DrivingLicenseNo: "",
         email: "",
         contactNumber: "",
         photo: null,
-        aadhar_file: null,
-        pan_file: null,
-        driving_file: null,
+        Aadhar: null,
+        Pan: null,
+        DrivingLicence: null,
         marksheet_file: null
       });
   
@@ -121,7 +102,78 @@ const StudentDetailsForm5 = () => {
       console.error('Error:', error);
       alert('Error submitting form');
     }
+  }; */
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      // Convert all files to base64
+      const filesToConvert = [
+        'Aadhar', 'Pan', 'DrivingLicence', 'Marksheet'
+      ];
+      
+      const formDataWithBase64 = { ...formData };
+      
+      // Convert each file to base64
+      for (const field of filesToConvert) {
+        if (formData[field]) {
+          formDataWithBase64[field] = await fileToBase64(formData[field]);
+        }
+      }
+  
+      // Submit to server endpoint
+      const response = await fetch('https://stagingapi.teamleaseedtech.com/api/enquiry/saveForm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formDataWithBase64),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const result = await response.json();
+      console.log('Success:', result);
+      
+      // Update local state with submitted data
+      setSubmittedData([...submittedData, formData]);
+      
+      // Reset form
+      setFormData({
+        Name: "",
+        Dob: "",
+        AadharNo: "",
+        PanNo: "",
+        DrivingLicenseNo: "",
+        email: "",
+        contactNumber: "",
+        photo: null,
+        Aadhar: null,
+        Pan: null,
+        DrivingLicence: null,
+        Marksheet: null,
+        MarksheetStatus: null
+      });
+  
+      alert('Form submitted successfully!');
+      
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error submitting form');
+      //alert('Form submitted successfully!');
+    }
   };
+
+  // Helper function to convert file to base64
+const fileToBase64 = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -130,11 +182,11 @@ const StudentDetailsForm5 = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Full Name */}
           <div className="space-y-2">
-            <Label htmlFor="fullName">Full Name</Label>
+            <Label htmlFor="Name">Full Name</Label>
             <Input
-              id="fullName"
-              name="fullName"
-              value={formData.fullName}
+              id="Name"
+              name="Name"
+              value={formData.Name}
               onChange={handleChange}
               placeholder="Enter your full name"
               required
@@ -143,92 +195,92 @@ const StudentDetailsForm5 = () => {
 
           {/* Date of Birth - Fixed */}
           <div className="space-y-2">
-            <Label htmlFor="dob">Date of Birth</Label>
+            <Label htmlFor="Dob">Date of Birth</Label>
             <Input
-              id="dob"
-              name="dob"
+              id="Dob"
+              name="Dob"
               type="date"
-              value={formData.dob}
+              value={formData.Dob}
               onChange={handleDateChange}
               max={new Date().toISOString().split('T')[0]} // Prevent future dates
               required
             />
           </div>
 
-          {/* Aadhar Section */}
+          {/* AadharNo Section */}
           <div className="space-y-2">
-            <Label htmlFor="aadhar">Aadhar Number</Label>
+            <Label htmlFor="AadharNo">AadharNo Number</Label>
             <Input
-              id="aadhar"
-              name="aadhar"
-              value={formData.aadhar}
+              id="AadharNo"
+              name="AadharNo"
+              value={formData.AadharNo}
               onChange={handleChange}
-              placeholder="Enter 12-digit Aadhar number"
+              placeholder="Enter 12-digit AadharNo number"
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="aadhar_file">Aadhar Attachment</Label>
+            <Label htmlFor="Aadhar">Aadhar Attachment</Label>
             <Input
-              id="aadhar_file"
-              name="aadhar_file"
+              id="Aadhar"
+              name="Aadhar"
               type="file"
               accept=".pdf,.jpg,.jpeg,.png"
               onChange={handleChange}
             />
-            {formData.aadhar_file && (
-              <span className="text-sm text-gray-500">{formData.aadhar_file.name}</span>
+            {formData.Aadhar && (
+              <span className="text-sm text-gray-500">{formData.Aadhar.name}</span>
             )}
           </div>
 
-          {/* PAN Section */}
+          {/* PanNo Section */}
           <div className="space-y-2">
-            <Label htmlFor="pan">PAN Number</Label>
+            <Label htmlFor="PanNo">PAN Number</Label>
             <Input
-              id="pan"
-              name="pan"
-              value={formData.pan}
+              id="PanNo"
+              name="PanNo"
+              value={formData.PanNo}
               onChange={handleChange}
               placeholder="Enter PAN number"
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="pan_file">PAN Attachment</Label>
+            <Label htmlFor="Pan">PAN Attachment</Label>
             <Input
-              id="pan_file"
-              name="pan_file"
+              id="Pan"
+              name="Pan"
               type="file"
               accept=".pdf,.jpg,.jpeg,.png"
               onChange={handleChange}
             />
-            {formData.pan_file && (
-              <span className="text-sm text-gray-500">{formData.pan_file.name}</span>
+            {formData.Pan && (
+              <span className="text-sm text-gray-500">{formData.Pan.name}</span>
             )}
           </div>
 
-          {/* Driving License Section */}
+          {/* Driving DrivingLicenseNo Section */}
           <div className="space-y-2">
-            <Label htmlFor="license">Driving License Number</Label>
+            <Label htmlFor="DrivingLicenseNo">Driving License Number</Label>
             <Input
-              id="license"
-              name="license"
-              value={formData.license}
+              id="DrivingLicenseNo"
+              name="DrivingLicenseNo"
+              value={formData.DrivingLicenseNo}
               onChange={handleChange}
-              placeholder="Enter driving license number"
+              placeholder="Enter driving DrivingLicenseNo number"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="driving_file">Driving License Attachment</Label>
+            <Label htmlFor="DrivingLicence">Driving License Attachment</Label>
             <Input
-              id="driving_file"
-              name="driving_file"
+              id="DrivingLicence"
+              name="DrivingLicence"
               type="file"
               accept=".pdf,.jpg,.jpeg,.png"
               onChange={handleChange}
             />
-            {formData.driving_file && (
-              <span className="text-sm text-gray-500">{formData.driving_file.name}</span>
+            {formData.DrivingLicence && (
+              <span className="text-sm text-gray-500">{formData.DrivingLicence.name}</span>
             )}
           </div>
 
@@ -236,24 +288,24 @@ const StudentDetailsForm5 = () => {
           <div className="space-y-2">
             <Label htmlFor="marksheet">Marksheet Details</Label>
             <Input
-              id="marksheet"
-              name="marksheet"
-              value={formData.marksheet}
+              id="MarksheetStatus"
+              name="MarksheetStatus"
+              value={formData.MarksheetStatus}
               onChange={handleChange}
               placeholder="Enter marksheet details"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="marksheet_file">Marksheet Attachment</Label>
+            <Label htmlFor="Marksheet">Marksheet Attachment</Label>
             <Input
-              id="marksheet_file"
-              name="marksheet_file"
+              id="Marksheet"
+              name="Marksheet"
               type="file"
               accept=".pdf,.jpg,.jpeg,.png"
               onChange={handleChange}
             />
-            {formData.marksheet_file && (
-              <span className="text-sm text-gray-500">{formData.marksheet_file.name}</span>
+            {formData.Marksheet && (
+              <span className="text-sm text-gray-500">{formData.Marksheet.name}</span>
             )}
           </div>
 
@@ -310,21 +362,21 @@ const StudentDetailsForm5 = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {submittedData.map((data, index) => {
-                  const aadharValidation = getFileValidation(data.aadhar_file);
-                  const panValidation = getFileValidation(data.pan_file);
-                  const licenseValidation = getFileValidation(data.driving_file);
+                  const aadharValidation = getFileValidation(data.Aadhar);
+                  const panValidation = getFileValidation(data.Pan);
+                  const licenseValidation = getFileValidation(data.DrivingLicence);
                   
                   return (
                     <tr key={index}>
-                      <td className="px-4 py-3 whitespace-nowrap">{data.fullName}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">{data.Name}</td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {data.aadhar_file?.name || "N/A"}
+                        {data.Aadhar?.name || "N/A"}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {data.pan_file?.name || "N/A"}
+                        {data.Pan?.name || "N/A"}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {data.driving_file?.name || "N/A"}
+                        {data.DrivingLicence?.name || "N/A"}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="flex flex-col space-y-1">
@@ -335,7 +387,7 @@ const StudentDetailsForm5 = () => {
                             PAN: {panValidation.status}
                           </span>
                           <span className={`text-${licenseValidation.color}-600`}>
-                            License: {licenseValidation.status}
+                            DrivingLicenseNo: {licenseValidation.status}
                           </span>
                         </div>
                       </td>
