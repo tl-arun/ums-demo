@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdmissionForm from './components/AdmissionForm';
-import AdmissionForm3 from './components/AdmissionForm4';
+import AdmissionForm3 from './components/AdmissionForm5';
 import AdminDashboard from './components/AdminDashboard';
 import Home from './components/Home';
 import Navigation from './components/Navigation';
